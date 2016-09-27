@@ -117,6 +117,13 @@ var Terminal = (function () {
 			this._output.appendChild(newLine)
 		}
 
+		// This must not be used in promptInput for security reasons
+		this.printHTML = function (message) {
+			var newLine = document.createElement('div')
+			newLine.innerHTML = message
+			this._output.appendChild(newLine)
+		}
+
 		this.input = function (message, callback) {
 			promptInput(this, message, PROMPT_INPUT, callback)
 		}
