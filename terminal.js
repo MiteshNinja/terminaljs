@@ -86,7 +86,7 @@ var Terminal = (function () {
 
     var terminalBeep
 
-    var TerminalConstructor = function (id) {
+    var TerminalConstructor = function (className, id) {
         if (!terminalBeep) {
             terminalBeep = document.createElement('audio')
             // TODO: fix the beep
@@ -97,6 +97,9 @@ var Terminal = (function () {
 
         this.html = document.createElement('div')
         this.html.className = 'Terminal'
+        if (typeof(className) == 'string') {
+            this.html.className += ' ' + className
+        }
         if (typeof(id) === 'string') { this.html.id = id }
 
         this._innerWindow = document.createElement('div')
@@ -118,7 +121,6 @@ var Terminal = (function () {
             this._output.appendChild(newLine)
         }
 
-        // This must not be used in promptInput for security reasons
         this.printHTML = function (message) {
             var newLine = document.createElement('div')
             newLine.innerHTML = message
