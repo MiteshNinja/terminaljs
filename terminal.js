@@ -17,7 +17,7 @@ var Terminal = (function () {
     }
 
     var firstPrompt = true;
-    var promptChar = '$';
+    var defaultPromptChar = '$ ';
     promptInput = function (terminalObj, message, PROMPT_TYPE, callback) {
         var shouldDisplayInput = (PROMPT_TYPE === PROMPT_INPUT)
         var inputField = document.createElement('input')
@@ -29,12 +29,15 @@ var Terminal = (function () {
         inputField.style.opacity = '0'
         inputField.style.fontSize = '0.2em'
 
-        terminalObj._inputLine.textContent = promptChar + ' '
+        terminalObj._inputLine.textContent = ''
+        terminalObj._prompt.style.whiteSpace = 'pre'
+        terminalObj.setPrompt(defaultPromptChar)
         terminalObj._input.style.display = 'block'
         terminalObj.html.appendChild(inputField)
         fireCursorInterval(inputField, terminalObj)
 
         var cleanInput = function (input) {
+            return input
             return input.slice(promptChar.length + 1, input.length)
         }
 
@@ -66,7 +69,7 @@ var Terminal = (function () {
             if (PROMPT_TYPE === PROMPT_CONFIRM || e.which === 13) {
                 terminalObj._input.style.display = 'none'
                 var inputValue = inputField.value
-                if (shouldDisplayInput) terminalObj.print(inputValue)
+                if (shouldDisplayInput) terminalObj.print(defaultPromptChar + inputValue)
                 terminalObj.html.removeChild(inputField)
                 inputValue = cleanInput(inputValue)
                 if (typeof(callback) === 'function') {
@@ -104,6 +107,7 @@ var Terminal = (function () {
 
         this._innerWindow = document.createElement('div')
         this._output = document.createElement('p')
+        this._prompt = document.createElement('span')
         this._inputLine = document.createElement('span') //the span element where the users input is put
         this._cursor = document.createElement('span')
         this._input = document.createElement('p') //the full element administering the user input, including cursor
@@ -174,6 +178,11 @@ var Terminal = (function () {
             this._shouldBlinkCursor = (bool === 'TRUE' || bool === '1' || bool === 'YES')
         }
 
+        this.setPrompt = function (promptChar) {
+            this._prompt.textContent = promptChar
+        }
+
+        this._input.appendChild(this._prompt)
         this._input.appendChild(this._inputLine)
         this._input.appendChild(this._cursor)
         this._innerWindow.appendChild(this._output)
