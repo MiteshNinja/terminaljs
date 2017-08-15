@@ -75,7 +75,7 @@ var Terminal = (function () {
                 if (typeof(callback) === 'function') {
                     if (PROMPT_TYPE === PROMPT_CONFIRM) {
                         callback(inputValue.toUpperCase()[0] === 'Y' ? true : false)
-                    } else callback(inputValue)
+                    } else callback(inputValue, e)
                 }
             }
         }
